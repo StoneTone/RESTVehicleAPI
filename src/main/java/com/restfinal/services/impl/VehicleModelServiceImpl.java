@@ -33,13 +33,14 @@ public class VehicleModelServiceImpl implements VehicleModelService {
     @Override
     public VehicleModel getModelById(Integer id) {
         return vehicleModelRepo.findById(id)
-                                .orElseThrow(() -> new ModelNotFoundException(id));
+                .orElseThrow(() -> new ModelNotFoundException(id));
     }
 
     @Override
     public VehicleModel saveModel(VehicleModel vehicleModel) {
 
         VehicleModel existingModel = vehicleModelRepo.findByModelName(vehicleModel.getModelName());
+
         if (existingModel != null && existingModel.getModelName().equals(vehicleModelRepo.findByModelName(vehicleModel.getModelName()).getModelName())) {
             throw new MakeExistsException();
         } else {
@@ -50,11 +51,13 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
     @Override
     public VehicleModel updateModel(VehicleModel vehicleModel) {
-        if(vehicleModel.getModelName().equals(vehicleModelRepo.findByModelName(vehicleModel.getModelName()).getModelName()))
-        {
+        VehicleModel existingModel = vehicleModelRepo.findByModelName(vehicleModel.getModelName());
+
+        if (existingModel != null && vehicleModel.getModelName().equals(vehicleModelRepo.findByModelName(vehicleModel.getModelName()).getModelName())) {
             throw new ModelExistsException();
+        } else {
+            return vehicleModelRepo.save(vehicleModel);
         }
-        return vehicleModelRepo.save(vehicleModel);
     }
 
     @Override
@@ -62,12 +65,8 @@ public class VehicleModelServiceImpl implements VehicleModelService {
         VehicleModel modelToPatch = vehicleModelRepo.findById(modelId)
                 .orElseThrow(() -> new MakeNotFoundException(modelId));
 
-        if(modelToPatch.getModelName().equals(vehicleModelRepo.findByModelName(modelToPatch.getModelName()).getModelName()))
-        {
-            throw new ModelExistsException();
-        }
 
-        updates.forEach((k,o) -> {
+        updates.forEach((k, o) -> {
             try {
                 Field nameField = modelToPatch.getClass().getDeclaredField(k);
                 nameField.setAccessible(true);
@@ -77,7 +76,15 @@ public class VehicleModelServiceImpl implements VehicleModelService {
             }
         });
 
+        VehicleModel findSimModel = vehicleModelRepo.findByModelName(modelToPatch.getModelName());
+
+
+        if (findSimModel != null && modelToPatch.getModelName() != null && modelToPatch.getModelName().equals(findSimModel.getModelName())) {
+            throw new MakeExistsException();
+        }
+
         return vehicleModelRepo.save(modelToPatch);
+
     }
 
     @Override

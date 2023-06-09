@@ -36,11 +36,16 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
 
     @Override
     public VehicleMake updateMake(VehicleMake vehicleMake) {
-        if(vehicleMake.getMakeName().equals(vehicleMakeRepo.findByMakeName(vehicleMake.getMakeName()).getMakeName()))
+
+        VehicleMake existingMake = vehicleMakeRepo.findByMakeName(vehicleMake.getMakeName());
+
+        if(existingMake != null && existingMake.getMakeName().equals(vehicleMakeRepo.findByMakeName(vehicleMake.getMakeName()).getMakeName()))
         {
             throw new MakeExistsException();
         }
-        return vehicleMakeRepo.save(vehicleMake);
+        else {
+            return vehicleMakeRepo.save(vehicleMake);
+        }
     }
 
     @Override
@@ -48,11 +53,6 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
 
         VehicleMake makeToPatch = vehicleMakeRepo.findById(makeId)
                 .orElseThrow(() -> new MakeNotFoundException(makeId));
-
-        if(makeToPatch.getMakeName().equals(vehicleMakeRepo.findByMakeName(makeToPatch.getMakeName()).getMakeName()))
-        {
-            throw new MakeExistsException();
-        }
 
             updates.forEach((k,o) -> {
                 try {
@@ -63,13 +63,19 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
                     throw new VehicleNotFoundException(makeId);
                 }
             });
-            return vehicleMakeRepo.save(makeToPatch);
 
+            VehicleMake findSimMake = vehicleMakeRepo.findByMakeName(makeToPatch.getMakeName());
+
+        if (findSimMake != null && makeToPatch.getMakeName() != null && makeToPatch.getMakeName().equals(findSimMake.getMakeName())) {
+            throw new MakeExistsException();
+        }
+        return vehicleMakeRepo.save(makeToPatch);
     }
 
 
     @Override
     public VehicleMake saveMake(VehicleMake vehicleMake) {
+
         VehicleMake existingMake = vehicleMakeRepo.findByMakeName(vehicleMake.getMakeName());
         if (existingMake != null && existingMake.getMakeName().equals(vehicleMake.getMakeName())) {
             throw new MakeExistsException();
