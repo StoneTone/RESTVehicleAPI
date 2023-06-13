@@ -1,10 +1,7 @@
 package com.restfinal.services;
 
 import com.restfinal.domain.VehicleModel;
-import com.restfinal.domain.dto.VehicleRequest;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.List;
 import java.util.Map;
 
 public interface VehicleModelService {

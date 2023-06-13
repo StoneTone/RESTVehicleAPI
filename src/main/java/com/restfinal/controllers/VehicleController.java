@@ -2,9 +2,11 @@ package com.restfinal.controllers;
 
 import com.restfinal.domain.Vehicle;
 import com.restfinal.domain.VehicleMake;
+import com.restfinal.domain.VehicleModel;
 import com.restfinal.exceptions.VehicleNotFoundException;
 import com.restfinal.repositories.jpa.VehicleModelRepo;
 import com.restfinal.services.VehicleMakeService;
+import com.restfinal.services.VehicleModelService;
 import com.restfinal.services.VehicleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -12,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +24,7 @@ import java.util.Map;
 public class VehicleController {
 
     final private VehicleService vehicleService;
+    final private VehicleModelService vehicleModelService;
 
     @GetMapping("")
     public ResponseEntity<Iterable> getAllVehicles(){
@@ -35,7 +39,7 @@ public class VehicleController {
 
 
     @PostMapping("/")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<Vehicle> createVehicle(@RequestBody Vehicle vehicle)
     {
         return new ResponseEntity<>(
@@ -44,8 +48,10 @@ public class VehicleController {
             );
     }
 
+
+
     @PutMapping("")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<Vehicle> updateVehicle(@RequestBody Vehicle vehicle)
     {
         return new ResponseEntity<>(
@@ -55,7 +61,7 @@ public class VehicleController {
     }
 
     @PatchMapping("/{vehicleId}")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<?> patchVehicle(@PathVariable Integer vehicleId,
                                           @RequestBody Map<String, Object> updates)
     {
@@ -66,7 +72,7 @@ public class VehicleController {
     }
 
     @DeleteMapping("/{vehicleId}")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<?> deleteVehicle(@PathVariable Integer vehicleId)
     {
         vehicleService.deleteVehicle(vehicleId);

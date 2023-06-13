@@ -1,11 +1,7 @@
 package com.restfinal.controllers;
 
-import com.restfinal.domain.VehicleMake;
+import com.restfinal.domain.Vehicle;
 import com.restfinal.domain.VehicleModel;
-import com.restfinal.domain.dto.VehicleRequest;
-import com.restfinal.exceptions.ModelExistsException;
-import com.restfinal.exceptions.ModelNotFoundException;
-import com.restfinal.repositories.jpa.VehicleModelRepo;
 import com.restfinal.services.VehicleModelService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
@@ -42,6 +38,22 @@ public class ModelController {
 
         return new ResponseEntity<>(
                 vehicleModelService.saveModel(vehicleModel),
+                HttpStatus.CREATED
+        );
+    }
+
+    @PostMapping("/{modelId}/vehicle")
+    public ResponseEntity<?> createVehicleWithModel(@PathVariable Integer modelId, @RequestBody Vehicle vehicle)
+    {
+        VehicleModel model = vehicleModelService.getModelById(modelId);
+        model.getVehicleList().add(vehicle);
+        vehicleModelService.updateModel(model);
+        for (int i = 0; i < model.getVehicleList().size(); i++) {
+            Vehicle vehicle1 = model.getVehicleList().get(i);
+            if (vehicle1.getVin().equals(vehicle.getVin())) vehicle = vehicle1;
+        }
+        return new ResponseEntity<>(
+                vehicle,
                 HttpStatus.CREATED
         );
     }
