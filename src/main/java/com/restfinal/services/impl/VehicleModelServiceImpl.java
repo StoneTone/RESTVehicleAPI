@@ -1,13 +1,15 @@
 package com.restfinal.services.impl;
 
+import com.restfinal.domain.VehicleMake;
 import com.restfinal.domain.VehicleModel;
+import com.restfinal.domain.dto.VehicleRequest;
 import com.restfinal.exceptions.*;
+import com.restfinal.repositories.jpa.VehicleMakeRepo;
 import com.restfinal.repositories.jpa.VehicleModelRepo;
 import com.restfinal.services.VehicleMakeService;
 import com.restfinal.services.VehicleModelService;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
@@ -36,20 +38,19 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
     @Override
     public VehicleModel saveModel(VehicleModel vehicleModel) {
+
         VehicleModel existingModel = vehicleModelRepo.findByModelName(vehicleModel.getModelName());
-        if (existingModel != null) {
-            throw new ModelExistsException();
+        if (existingModel != null && existingModel.getModelName().equals(vehicleModelRepo.findByModelName(vehicleModel.getModelName()).getModelName())) {
+            throw new MakeExistsException();
         } else {
             return vehicleModelRepo.save(vehicleModel);
         }
 
     }
 
-
     @Override
     public VehicleModel updateModel(VehicleModel vehicleModel) {
-        VehicleModel existingModel = vehicleModelRepo.findByModelName(vehicleModel.getModelName());
-        if(!existingModel.getModelId().equals(vehicleModel.getModelId()))
+        if(vehicleModel.getModelName().equals(vehicleModelRepo.findByModelName(vehicleModel.getModelName()).getModelName()))
         {
             throw new ModelExistsException();
         }
