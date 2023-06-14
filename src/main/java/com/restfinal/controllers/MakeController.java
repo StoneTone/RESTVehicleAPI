@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/make")
 public class MakeController {
@@ -23,7 +24,7 @@ public class MakeController {
 
     //get all
     @GetMapping
-    @Cacheable(value = "vehicleMake")
+//    @Cacheable(value = "vehicleMake")
     public ResponseEntity<List<VehicleMake>> getAllMake()
     {
         return ResponseEntity.ok(vehicleMakeService.listAllMakes());
@@ -36,7 +37,7 @@ public class MakeController {
     }
     //creating new make
     @PostMapping("/")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<VehicleMake> createMake(@RequestBody VehicleMake vehicleMake)
     {
         return new ResponseEntity<>(
@@ -46,7 +47,7 @@ public class MakeController {
     }
     //updating make
     @PutMapping("")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<VehicleMake> updateVehicle(@RequestBody VehicleMake vehicleMake)
     {
         return new ResponseEntity<>(
@@ -56,7 +57,7 @@ public class MakeController {
     }
     //patching make
     @PatchMapping("/{makeId}")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<?> patchMake(@PathVariable Integer makeId,
                                           @RequestBody Map<String, Object> updates)
     {
@@ -67,7 +68,7 @@ public class MakeController {
     }
     //delete
     @DeleteMapping("/{makeId}")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<?> deleteVehicle(@PathVariable Integer makeId)
     {
         vehicleMakeService.deleteMake(makeId);

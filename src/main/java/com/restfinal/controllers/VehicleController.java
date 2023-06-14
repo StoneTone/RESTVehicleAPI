@@ -1,11 +1,6 @@
 package com.restfinal.controllers;
 
 import com.restfinal.domain.Vehicle;
-import com.restfinal.domain.VehicleMake;
-import com.restfinal.domain.VehicleModel;
-import com.restfinal.exceptions.VehicleNotFoundException;
-import com.restfinal.repositories.jpa.VehicleModelRepo;
-import com.restfinal.services.VehicleMakeService;
 import com.restfinal.services.VehicleModelService;
 import com.restfinal.services.VehicleService;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/vehicle")
 @RequiredArgsConstructor

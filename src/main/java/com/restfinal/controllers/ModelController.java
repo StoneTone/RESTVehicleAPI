@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/model")
 public class ModelController {
@@ -32,7 +33,7 @@ public class ModelController {
     }
 
     @PostMapping("/")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<VehicleModel> createModel(@RequestBody VehicleModel vehicleModel)
     {
 
@@ -59,7 +60,7 @@ public class ModelController {
     }
 
     @PutMapping("")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<VehicleModel> updateModel(@RequestBody VehicleModel vehicleModel)
     {
         return new ResponseEntity<>(
@@ -69,7 +70,7 @@ public class ModelController {
     }
 
     @PatchMapping("/{modelId}")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<?> patchModel(@PathVariable Integer modelId,
                                        @RequestBody Map<String, Object> updates)
     {
@@ -80,7 +81,7 @@ public class ModelController {
     }
 
     @DeleteMapping("/{modelId}")
-    @CacheEvict(value = "vehicleMake", allEntries = true)
+//    @CacheEvict(value = "vehicleMake", allEntries = true)
     public ResponseEntity<?> deleteModel(@PathVariable Integer modelId)
     {
         vehicleModelService.deleteModel(modelId);

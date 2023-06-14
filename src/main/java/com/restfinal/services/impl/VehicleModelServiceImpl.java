@@ -1,10 +1,7 @@
 package com.restfinal.services.impl;
 
-import com.restfinal.domain.VehicleMake;
 import com.restfinal.domain.VehicleModel;
-import com.restfinal.domain.dto.VehicleRequest;
 import com.restfinal.exceptions.*;
-import com.restfinal.repositories.jpa.VehicleMakeRepo;
 import com.restfinal.repositories.jpa.VehicleModelRepo;
 import com.restfinal.services.VehicleMakeService;
 import com.restfinal.services.VehicleModelService;
@@ -50,7 +47,8 @@ public class VehicleModelServiceImpl implements VehicleModelService {
 
     @Override
     public VehicleModel updateModel(VehicleModel vehicleModel) {
-        if(vehicleModel.getModelName().equals(vehicleModelRepo.findByModelName(vehicleModel.getModelName()).getModelName()))
+        VehicleModel existingModel = vehicleModelRepo.findByModelName(vehicleModel.getModelName());
+        if(!existingModel.getModelId().equals(vehicleModel.getModelId()))
         {
             throw new ModelExistsException();
         }
