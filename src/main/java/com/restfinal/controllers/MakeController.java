@@ -2,8 +2,6 @@ package com.restfinal.controllers;
 
 import com.restfinal.domain.VehicleMake;
 import com.restfinal.services.VehicleMakeService;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

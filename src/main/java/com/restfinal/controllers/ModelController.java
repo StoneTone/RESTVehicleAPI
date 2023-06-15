@@ -3,7 +3,6 @@ package com.restfinal.controllers;
 import com.restfinal.domain.Vehicle;
 import com.restfinal.domain.VehicleModel;
 import com.restfinal.services.VehicleModelService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

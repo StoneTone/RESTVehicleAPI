@@ -1,13 +1,14 @@
 package com.restfinal.services.impl;
 
-import com.restfinal.domain.Vehicle;
 import com.restfinal.domain.VehicleMake;
 import com.restfinal.exceptions.MakeExistsException;
 import com.restfinal.exceptions.MakeNotFoundException;
-import com.restfinal.exceptions.ModelNotFoundException;
+
 import com.restfinal.exceptions.VehicleNotFoundException;
 import com.restfinal.repositories.jpa.VehicleMakeRepo;
+import com.restfinal.repositories.jpa.VehicleModelRepo;
 import com.restfinal.services.VehicleMakeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
@@ -15,13 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class VehicleMakeServiceImpl implements VehicleMakeService {
 
-    private VehicleMakeRepo vehicleMakeRepo;
+    final private VehicleMakeRepo vehicleMakeRepo;
 
-    public VehicleMakeServiceImpl(VehicleMakeRepo vehicleMakeRepo) {
-        this.vehicleMakeRepo = vehicleMakeRepo;
-    }
 
     @Override
     public List<VehicleMake> listAllMakes() {
@@ -77,9 +76,18 @@ public class VehicleMakeServiceImpl implements VehicleMakeService {
     public VehicleMake saveMake(VehicleMake vehicleMake) {
 
         VehicleMake existingMake = vehicleMakeRepo.findByMakeName(vehicleMake.getMakeName());
-        if (existingMake != null && existingMake.getMakeName().equals(vehicleMake.getMakeName())) {
-            throw new MakeExistsException();
+
+        if (existingMake != null) {
+            // Make already exists
+            if (!existingMake.getModelList().containsAll(vehicleMake.getModelList())) {
+                // Add new models to the existing make's modelList
+                existingMake.getModelList().addAll(vehicleMake.getModelList());
+                return vehicleMakeRepo.save(existingMake);
+            } else {
+                throw new MakeExistsException();
+            }
         } else {
+            // Make does not exist, create a new one
             return vehicleMakeRepo.save(vehicleMake);
         }
     }
